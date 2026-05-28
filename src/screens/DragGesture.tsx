@@ -2,38 +2,76 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { colors } from './src/theme/colors';
+import { colors } from '../theme/colors';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
-type FirstAnimationScreenProps = {
+type DragGestureProps = {
   navigation: DrawerNavigationProp<any>;
 };
 
-export const FirstAnimationScreen: React.FC<FirstAnimationScreenProps> = ({
-  navigation,
-}) => {
+export const DragGesture: React.FC<DragGestureProps> = ({ navigation }) => {
   const { bottom } = useSafeAreaInsets();
+  const offset = useSharedValue({ x: 0, y: 0 });
+  const start = useSharedValue({ x: 0, y: 0 });
 
-  const startAnimation = () => {};
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: offset.value.x },
+        { translateY: offset.value.y },
+      ],
+    };
+  });
 
-  const resetAnimation = () => {};
+  const drag = Gesture.Pan()
+    .onStart(e => {
+      offset.value = {
+        x: e.translationX + offset.value.x,
+        y: e.translationY + offset.value.y,
+      };
+    })
+    .onUpdate(e => {
+      offset.value = {
+        x: e.translationX + start.value.x,
+        y: e.translationY + start.value.y,
+      };
+    })
+    .onEnd(() => {
+      start.value = {
+        x: offset.value.x,
+        y: offset.value.y,
+      };
+    });
+
+  const resetAnimation = () => {
+    offset.value = {
+      x: 0,
+      y: 0,
+    };
+    start.value = {
+      x: 0,
+      y: 0,
+    };
+  };
 
   return (
     <View style={[styles.safeArea, { paddingBottom: bottom + 6 }]}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.description}>{'Sub title'}</Text>
+          <Text style={styles.description}>{'Drag the purple box.'}</Text>
         </View>
 
-        <View style={styles.animationContainer}></View>
+        <View style={styles.animationContainer}>
+          <GestureDetector gesture={drag}>
+            <Animated.View style={[styles.animatedBox, animatedStyles]} />
+          </GestureDetector>
+        </View>
 
         <View style={styles.controlsContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.startButton]}
-            onPress={startAnimation}
-          >
-            <Text style={styles.buttonText}>{'Start'}</Text>
-          </TouchableOpacity>
-
           <TouchableOpacity
             style={[styles.button, styles.resetButton]}
             onPress={resetAnimation}
@@ -83,6 +121,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.app_FFFFFF,
     shadowOffset: { width: 0, height: 2 },
   },
+  animatedBox: {
+    width: 100,
+    height: 100,
+    borderRadius: 12,
+    backgroundColor: colors.primary,
+  },
   controlsContainer: {
     gap: 12,
     marginBottom: 16,
@@ -94,9 +138,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  startButton: {
-    backgroundColor: colors.app_4CAF50,
   },
   resetButton: {
     backgroundColor: colors.app_FF9800,

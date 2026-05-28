@@ -2,38 +2,58 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { colors } from './src/theme/colors';
+import { colors } from '../theme/colors';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 
-type FirstAnimationScreenProps = {
+type TapGestureProps = {
   navigation: DrawerNavigationProp<any>;
 };
 
-export const FirstAnimationScreen: React.FC<FirstAnimationScreenProps> = ({
-  navigation,
-}) => {
+export const TapGesture: React.FC<TapGestureProps> = ({ navigation }) => {
   const { bottom } = useSafeAreaInsets();
+  const offset = useSharedValue({ x: 0, y: 0 });
 
-  const startAnimation = () => {};
+  const tap = Gesture.Tap().onEnd(e => {
+    offset.value = {
+      x: e.x - 10,
+      y: e.y - 10,
+    };
+  });
 
-  const resetAnimation = () => {};
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: offset.value.x },
+        { translateY: offset.value.y },
+      ],
+    };
+  });
+
+  const resetAnimation = () => {
+    offset.value = {
+      x: 0,
+      y: 0,
+    };
+  };
 
   return (
     <View style={[styles.safeArea, { paddingBottom: bottom + 6 }]}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.description}>{'Sub title'}</Text>
+          <Text style={styles.description}>{'Tap anywhere on white box.'}</Text>
         </View>
 
-        <View style={styles.animationContainer}></View>
+        <GestureDetector gesture={tap}>
+          <View style={styles.animationContainer}>
+            <Animated.View style={[styles.animatedBox, animatedStyles]} />
+          </View>
+        </GestureDetector>
 
         <View style={styles.controlsContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.startButton]}
-            onPress={startAnimation}
-          >
-            <Text style={styles.buttonText}>{'Start'}</Text>
-          </TouchableOpacity>
-
           <TouchableOpacity
             style={[styles.button, styles.resetButton]}
             onPress={resetAnimation}
@@ -77,8 +97,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 30,
     shadowOpacity: 0.1,
-    alignItems: 'center',
-    justifyContent: 'center',
     shadowColor: colors.app_000000,
     backgroundColor: colors.app_FFFFFF,
     shadowOffset: { width: 0, height: 2 },
@@ -95,11 +113,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  startButton: {
-    backgroundColor: colors.app_4CAF50,
-  },
   resetButton: {
     backgroundColor: colors.app_FF9800,
+  },
+  animatedBox: {
+    width: 20,
+    height: 20,
+    borderRadius: 12,
+    backgroundColor: colors.primary,
   },
   buttonText: {
     fontSize: 16,

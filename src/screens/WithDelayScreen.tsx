@@ -2,43 +2,66 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { colors } from './src/theme/colors';
+import { colors } from '../theme/colors';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from 'react-native-reanimated';
 
-type FirstAnimationScreenProps = {
+type WithDelayScreenProps = {
   navigation: DrawerNavigationProp<any>;
 };
 
-export const FirstAnimationScreen: React.FC<FirstAnimationScreenProps> = ({
+export const WithDelayScreen: React.FC<WithDelayScreenProps> = ({
   navigation,
 }) => {
   const { bottom } = useSafeAreaInsets();
+  const opacity = useSharedValue(0);
 
-  const startAnimation = () => {};
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
 
-  const resetAnimation = () => {};
+  const startAnimation = () => {
+    opacity.value = withDelay(1000, withTiming(1));
+  };
+
+  const resetAnimation = () => {
+    opacity.value = withDelay(1000, withTiming(0));
+  };
 
   return (
     <View style={[styles.safeArea, { paddingBottom: bottom + 6 }]}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.description}>{'Sub title'}</Text>
+          <Text style={styles.description}>
+            {
+              'withDelay is an animation modifier that lets you start an animation with a delay.'
+            }
+          </Text>
         </View>
 
-        <View style={styles.animationContainer}></View>
+        <View style={styles.animationContainer}>
+          <Animated.Text style={[styles.title, animatedStyle]}>
+            {'Value is updated'}
+          </Animated.Text>
+        </View>
 
         <View style={styles.controlsContainer}>
           <TouchableOpacity
             style={[styles.button, styles.startButton]}
             onPress={startAnimation}
           >
-            <Text style={styles.buttonText}>{'Start'}</Text>
+            <Text style={styles.buttonText}>{'Show'}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.resetButton]}
             onPress={resetAnimation}
           >
-            <Text style={styles.buttonText}>{'Reset'}</Text>
+            <Text style={styles.buttonText}>{'Hide'}</Text>
           </TouchableOpacity>
         </View>
 
@@ -112,6 +135,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     backgroundColor: colors.app_E0E0E0,
+  },
+  title: {
+    fontSize: 32,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    color: colors.app_333333,
   },
   backButtonText: {
     fontSize: 16,

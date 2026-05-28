@@ -15,11 +15,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { HomeScreen } from '../screens/HomeScreen';
 import { SharedValueScreen } from '../screens/SharedValueScreen';
 import { AnimatedStyleScreen } from '../screens/AnimatedStyleScreen';
+import { WithTimingScreen } from '../screens/WithTimingScreen';
+import { WithDecayScreen } from '../screens/WithDecayScreen';
+import { WithDelayScreen } from '../screens/WithDelayScreen';
+import { TapGesture } from '../screens/TapGesture';
+import { DragGesture } from '../screens/DragGesture';
 
 export type RootDrawerParamList = {
   Home: undefined;
   SharedValue: undefined;
   AnimatedStyle: undefined;
+  WithTiming: undefined;
+  WithDecay: undefined;
+  WithDelay: undefined;
+  TapGesture: undefined;
+  DragGesture: undefined;
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -31,6 +41,11 @@ const CustomDrawerContent = (props: any) => {
     { label: 'Home', screen: 'Home' },
     { label: 'Shared Value', screen: 'SharedValue' },
     { label: 'Animated Style', screen: 'AnimatedStyle' },
+    { label: 'With Timing', screen: 'WithTiming' },
+    { label: 'With Decay', screen: 'WithDecay' },
+    { label: 'With Delay', screen: 'WithDelay' },
+    { label: 'Tap Gesture', screen: 'TapGesture' },
+    { label: 'Drag Gesture', screen: 'DragGesture' },
   ];
 
   return (
@@ -108,6 +123,46 @@ export const RootNavigator = () => {
           options={{
             title: 'Animated Style',
             drawerLabel: 'Animated Style',
+          }}
+        />
+        <Drawer.Screen
+          name="WithTiming"
+          component={WithTimingScreen}
+          options={{
+            title: 'Animated Style',
+            drawerLabel: 'Animated Style',
+          }}
+        />
+        <Drawer.Screen
+          name="WithDecay"
+          component={WithDecayScreen}
+          options={{
+            title: 'With Decay',
+            drawerLabel: 'With Decay',
+          }}
+        />
+        <Drawer.Screen
+          name="WithDelay"
+          component={WithDelayScreen}
+          options={{
+            title: 'With Delay',
+            drawerLabel: 'With Delay',
+          }}
+        />
+        <Drawer.Screen
+          name="TapGesture"
+          component={TapGesture}
+          options={{
+            title: 'Tap Gesture',
+            drawerLabel: 'Tap Gesture',
+          }}
+        />
+        <Drawer.Screen
+          name="DragGesture"
+          component={DragGesture}
+          options={{
+            title: 'Drag Gesture',
+            drawerLabel: 'Drag Gesture',
           }}
         />
       </Drawer.Navigator>

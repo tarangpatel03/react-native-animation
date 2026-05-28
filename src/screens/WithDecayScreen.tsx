@@ -2,29 +2,53 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { colors } from './src/theme/colors';
+import { colors } from '../theme/colors';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDecay,
+} from 'react-native-reanimated';
 
-type FirstAnimationScreenProps = {
+type WithDecayScreenProps = {
   navigation: DrawerNavigationProp<any>;
 };
 
-export const FirstAnimationScreen: React.FC<FirstAnimationScreenProps> = ({
+export const WithDecayScreen: React.FC<WithDecayScreenProps> = ({
   navigation,
 }) => {
   const { bottom } = useSafeAreaInsets();
+  const velocityX = useSharedValue(0);
 
-  const startAnimation = () => {};
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: velocityX.value }],
+  }));
 
-  const resetAnimation = () => {};
+  const startAnimation = () => {
+    velocityX.value = withDecay({
+      velocity: 800,
+      deceleration: 0.998,
+      clamp: [-300, 300],
+    });
+  };
+
+  const resetAnimation = () => {
+    velocityX.value = 0;
+  };
 
   return (
     <View style={[styles.safeArea, { paddingBottom: bottom + 6 }]}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.description}>{'Sub title'}</Text>
+          <Text style={styles.description}>
+            {
+              'withDecay lets you create animations that mimic objects in motion with friction. The animation will start with the provided velocity and slow down over time according to the given deceleration rate until it stops.'
+            }
+          </Text>
         </View>
 
-        <View style={styles.animationContainer}></View>
+        <View style={styles.animationContainer}>
+          <Animated.View style={[styles.animatedBox, animatedStyle]} />
+        </View>
 
         <View style={styles.controlsContainer}>
           <TouchableOpacity
@@ -70,6 +94,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.app_666666,
   },
+  animatedBox: {
+    width: 100,
+    height: 100,
+    borderRadius: 12,
+    backgroundColor: colors.primary,
+  },
   animationContainer: {
     flex: 1,
     elevation: 3,
@@ -77,7 +107,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 30,
     shadowOpacity: 0.1,
-    alignItems: 'center',
     justifyContent: 'center',
     shadowColor: colors.app_000000,
     backgroundColor: colors.app_FFFFFF,
