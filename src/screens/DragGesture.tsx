@@ -4,8 +4,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { colors } from '../theme/colors';
 import Animated, {
+  clamp,
+  Easing,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
@@ -16,11 +19,13 @@ type DragGestureProps = {
 export const DragGesture: React.FC<DragGestureProps> = ({ navigation }) => {
   const { bottom } = useSafeAreaInsets();
   const offset = useSharedValue({ x: 0, y: 0 });
+  const scale = useSharedValue(1);
   const start = useSharedValue({ x: 0, y: 0 });
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [
+        { scale: scale.value },
         { translateX: offset.value.x },
         { translateY: offset.value.y },
       ],
@@ -28,6 +33,13 @@ export const DragGesture: React.FC<DragGestureProps> = ({ navigation }) => {
   });
 
   const drag = Gesture.Pan()
+
+    .onBegin(() => {
+      scale.value = withTiming(1.1, {
+        duration: 100,
+        easing: Easing.ease,
+      });
+    })
     .onStart(e => {
       offset.value = {
         x: e.translationX + offset.value.x,
@@ -35,12 +47,19 @@ export const DragGesture: React.FC<DragGestureProps> = ({ navigation }) => {
       };
     })
     .onUpdate(e => {
+      const x = e.translationX + start.value.x;
+      const y = e.translationY + start.value.y;
+
       offset.value = {
-        x: e.translationX + start.value.x,
-        y: e.translationY + start.value.y,
+        x: clamp(x, -150, 150),
+        y: clamp(y, -240, 240),
       };
     })
     .onEnd(() => {
+      scale.value = withTiming(1, {
+        duration: 100,
+        easing: Easing.ease,
+      });
       start.value = {
         x: offset.value.x,
         y: offset.value.y,

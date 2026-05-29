@@ -37,6 +37,8 @@ export const WithTimingScreen: React.FC<WithTimingScreenProps> = ({
   const { bottom } = useSafeAreaInsets();
   const translateX = useSharedValue(0);
   const [value, setValue] = useState('linear');
+  const [position, setPosition] = useState<'start' | 'end'>('start');
+  const [props, setProps] = useState(0);
   const [duration, setDuration] = useState(0);
   const minValue = useMemo(() => {
     if (
@@ -56,7 +58,7 @@ export const WithTimingScreen: React.FC<WithTimingScreenProps> = ({
       value === 'poly' ||
       value === 'step'
     ) {
-      setDuration(minValue);
+      setProps(minValue);
       return 10;
     }
     return 1000;
@@ -75,13 +77,13 @@ export const WithTimingScreen: React.FC<WithTimingScreenProps> = ({
       case 'circle':
         return Easing.circle;
       case 'back':
-        return Easing.back(duration);
+        return Easing.back(props);
       case 'elastic':
-        return Easing.elastic(duration);
+        return Easing.elastic(props);
       case 'poly':
-        return Easing.poly(duration);
+        return Easing.poly(props);
       case 'step':
-        return Easing.steps(duration, false);
+        return Easing.steps(props, false);
       case 'cubic':
         return Easing.cubic;
       case 'ease':
@@ -98,13 +100,23 @@ export const WithTimingScreen: React.FC<WithTimingScreenProps> = ({
   };
 
   const startAnimation = () => {
-    translateX.value = withTiming(translateX.value + 100, {
-      duration: 1000,
-      easing: getEasing(value),
-    });
+    if (position === 'start') {
+      translateX.value = withTiming(translateX.value + 300, {
+        duration: duration,
+        easing: getEasing(value),
+      });
+      setPosition('end');
+    } else {
+      translateX.value = withTiming(translateX.value - 300, {
+        duration: duration,
+        easing: getEasing(value),
+      });
+      setPosition('start');
+    }
   };
 
   const resetAnimation = () => {
+    setPosition('start');
     translateX.value = 0;
   };
 
@@ -114,25 +126,49 @@ export const WithTimingScreen: React.FC<WithTimingScreenProps> = ({
         <View style={styles.header}>
           <Text style={styles.description}>
             {
-              'withTiming will let you create animation that will perform in specific duration'
+              'withTiming will let you create animation that will perform in specific props'
             }
           </Text>
           <View>
             <DropdownComponent data={data} value={value} setValue={setValue} />
           </View>
-          <View style={styles.sliderHeader}>
-            <Text style={styles.sliderValue}>{`${duration.toFixed(0)}`}</Text>
+          <View>
+            <View style={styles.sliderHeader}>
+              <Text style={styles.sliderValue}>{`Duration: ${duration.toFixed(
+                0,
+              )} ms`}</Text>
+            </View>
+            <Slider
+              style={styles.slider}
+              value={duration}
+              minimumValue={100}
+              maximumValue={5000}
+              minimumTrackTintColor={colors.primary}
+              maximumTrackTintColor={colors.app_E0E0E0}
+              thumbTintColor={colors.primary}
+              onValueChange={setDuration}
+            />
           </View>
-          <Slider
-            style={styles.slider}
-            value={duration}
-            minimumValue={minValue}
-            maximumValue={maxValue}
-            minimumTrackTintColor={colors.primary}
-            maximumTrackTintColor={colors.app_E0E0E0}
-            thumbTintColor={colors.primary}
-            onValueChange={setDuration}
-          />
+          {(value === 'back' ||
+            value === 'elastic' ||
+            value === 'poly' ||
+            value === 'step') && (
+            <View>
+              <View style={styles.sliderHeader}>
+                <Text style={styles.sliderValue}>{`${props.toFixed(0)}`}</Text>
+              </View>
+              <Slider
+                style={styles.slider}
+                value={props}
+                minimumValue={minValue}
+                maximumValue={maxValue}
+                minimumTrackTintColor={colors.primary}
+                maximumTrackTintColor={colors.app_E0E0E0}
+                thumbTintColor={colors.primary}
+                onValueChange={setProps}
+              />
+            </View>
+          )}
         </View>
 
         <View style={styles.animationContainer}>
@@ -218,7 +254,6 @@ const styles = StyleSheet.create({
   animationContainer: {
     flex: 1,
     elevation: 3,
-    paddingLeft: 6,
     shadowRadius: 4,
     borderRadius: 12,
     marginBottom: 30,
