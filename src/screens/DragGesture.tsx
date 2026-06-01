@@ -33,7 +33,6 @@ export const DragGesture: React.FC<DragGestureProps> = ({ navigation }) => {
   });
 
   const drag = Gesture.Pan()
-
     .onBegin(() => {
       scale.value = withTiming(1.1, {
         duration: 100,

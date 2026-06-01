@@ -20,6 +20,7 @@ import { WithDecayScreen } from '../screens/WithDecayScreen';
 import { WithDelayScreen } from '../screens/WithDelayScreen';
 import { TapGesture } from '../screens/TapGesture';
 import { DragGesture } from '../screens/DragGesture';
+import { SwappableList } from '../screens/SwappableList';
 
 export type RootDrawerParamList = {
   Home: undefined;
@@ -30,6 +31,7 @@ export type RootDrawerParamList = {
   WithDelay: undefined;
   TapGesture: undefined;
   DragGesture: undefined;
+  SwappableList: undefined;
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -46,6 +48,7 @@ const CustomDrawerContent = (props: any) => {
     { label: 'With Delay', screen: 'WithDelay' },
     { label: 'Tap Gesture', screen: 'TapGesture' },
     { label: 'Drag Gesture', screen: 'DragGesture' },
+    { label: 'Swappable List', screen: 'SwappableList' },
   ];
 
   return (
@@ -129,8 +132,8 @@ export const RootNavigator = () => {
           name="WithTiming"
           component={WithTimingScreen}
           options={{
-            title: 'Animated Style',
-            drawerLabel: 'Animated Style',
+            title: 'With timing',
+            drawerLabel: 'With timing',
           }}
         />
         <Drawer.Screen
@@ -163,6 +166,14 @@ export const RootNavigator = () => {
           options={{
             title: 'Drag Gesture',
             drawerLabel: 'Drag Gesture',
+          }}
+        />
+        <Drawer.Screen
+          name="SwappableList"
+          component={SwappableList}
+          options={{
+            title: 'Swappable List',
+            drawerLabel: 'Swappable List',
           }}
         />
       </Drawer.Navigator>
