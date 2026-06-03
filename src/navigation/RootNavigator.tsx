@@ -21,6 +21,7 @@ import { WithDelayScreen } from '../screens/WithDelayScreen';
 import { TapGesture } from '../screens/TapGesture';
 import { DragGesture } from '../screens/DragGesture';
 import { SwappableList } from '../screens/SwappableList';
+import { LongPress } from '../screens/LongPress';
 
 export type RootDrawerParamList = {
   Home: undefined;
@@ -32,6 +33,7 @@ export type RootDrawerParamList = {
   TapGesture: undefined;
   DragGesture: undefined;
   SwappableList: undefined;
+  LongPress: undefined;
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -49,6 +51,7 @@ const CustomDrawerContent = (props: any) => {
     { label: 'Tap Gesture', screen: 'TapGesture' },
     { label: 'Drag Gesture', screen: 'DragGesture' },
     { label: 'Swappable List', screen: 'SwappableList' },
+    { label: 'Long Press', screen: 'LongPress' },
   ];
 
   return (
@@ -174,6 +177,14 @@ export const RootNavigator = () => {
           options={{
             title: 'Swappable List',
             drawerLabel: 'Swappable List',
+          }}
+        />
+        <Drawer.Screen
+          name="LongPress"
+          component={LongPress}
+          options={{
+            title: 'Long Press',
+            drawerLabel: 'Long Press',
           }}
         />
       </Drawer.Navigator>
