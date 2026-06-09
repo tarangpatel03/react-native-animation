@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { colors } from '../theme/colors';
+import { colors } from '../../theme/colors';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+import { AppButton } from '../../components/AppButton';
 
 type TapGestureProps = {
   navigation: DrawerNavigationProp<any>;
@@ -54,20 +55,10 @@ export const TapGesture: React.FC<TapGestureProps> = ({ navigation }) => {
         </GestureDetector>
 
         <View style={styles.controlsContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.resetButton]}
-            onPress={resetAnimation}
-          >
-            <Text style={styles.buttonText}>{'Reset'}</Text>
-          </TouchableOpacity>
+          <AppButton title="Reset" onPress={resetAnimation} />
         </View>
 
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backButtonText}>{'Back'}</Text>
-        </TouchableOpacity>
+        <AppButton title="Back" onPress={() => navigation.goBack()} />
       </View>
     </View>
   );
@@ -106,37 +97,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     flexDirection: 'row',
   },
-  button: {
-    flex: 1,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  resetButton: {
-    backgroundColor: colors.app_FF9800,
-  },
   animatedBox: {
     width: 20,
     height: 20,
     borderRadius: 12,
     backgroundColor: colors.primary,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.app_FFFFFF,
-  },
-  backButton: {
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    backgroundColor: colors.app_E0E0E0,
-  },
-  backButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.app_333333,
   },
 });

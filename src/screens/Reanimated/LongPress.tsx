@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { colors } from '../theme/colors';
+import { colors } from '../../theme/colors';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { AppButton } from '../../components/AppButton';
 
 type LongPressProps = {
   navigation: DrawerNavigationProp<any>;
@@ -45,22 +46,17 @@ export const LongPress: React.FC<LongPressProps> = ({ navigation }) => {
           <Text style={styles.description}>{'Press Button'}</Text>
         </View>
 
-        <GestureDetector gesture={composed}>
-          <View style={styles.animationContainer}>
+        <View style={styles.animationContainer}>
+          <GestureDetector gesture={composed}>
             <Animated.View style={[styles.backButton, animatedStyles]}>
               <Animated.Text style={styles.backButtonText}>
                 {'Press Button'}
               </Animated.Text>
             </Animated.View>
-          </View>
-        </GestureDetector>
+          </GestureDetector>
+        </View>
 
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backButtonText}>{'Back'}</Text>
-        </TouchableOpacity>
+        <AppButton title="Back" onPress={() => navigation.goBack()} />
       </View>
     </View>
   );
@@ -100,24 +96,6 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 16,
     flexDirection: 'row',
-  },
-  button: {
-    flex: 1,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  startButton: {
-    backgroundColor: colors.app_4CAF50,
-  },
-  resetButton: {
-    backgroundColor: colors.app_FF9800,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.app_FFFFFF,
   },
   backButton: {
     borderRadius: 8,

@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { colors } from '../theme/colors';
+import { colors } from '../../theme/colors';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withDecay,
 } from 'react-native-reanimated';
+import { AppButton } from '../../components/AppButton';
 
 type WithDecayScreenProps = {
   navigation: DrawerNavigationProp<any>;
@@ -51,27 +52,11 @@ export const WithDecayScreen: React.FC<WithDecayScreenProps> = ({
         </View>
 
         <View style={styles.controlsContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.startButton]}
-            onPress={startAnimation}
-          >
-            <Text style={styles.buttonText}>{'Start'}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.button, styles.resetButton]}
-            onPress={resetAnimation}
-          >
-            <Text style={styles.buttonText}>{'Reset'}</Text>
-          </TouchableOpacity>
+          <AppButton title="Start" onPress={startAnimation} />
+          <AppButton title="Reset" onPress={resetAnimation} />
         </View>
 
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backButtonText}>{'Back'}</Text>
-        </TouchableOpacity>
+        <AppButton title="Back" onPress={() => navigation.goBack()} />
       </View>
     </View>
   );
@@ -116,35 +101,5 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 16,
     flexDirection: 'row',
-  },
-  button: {
-    flex: 1,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  startButton: {
-    backgroundColor: colors.app_4CAF50,
-  },
-  resetButton: {
-    backgroundColor: colors.app_FF9800,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.app_FFFFFF,
-  },
-  backButton: {
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    backgroundColor: colors.app_E0E0E0,
-  },
-  backButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.app_333333,
   },
 });

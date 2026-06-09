@@ -4,24 +4,27 @@ import {
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { HomeScreen } from '../screens/HomeScreen';
-import { SharedValueScreen } from '../screens/SharedValueScreen';
-import { AnimatedStyleScreen } from '../screens/AnimatedStyleScreen';
-import { WithTimingScreen } from '../screens/WithTimingScreen';
-import { WithDecayScreen } from '../screens/WithDecayScreen';
-import { WithDelayScreen } from '../screens/WithDelayScreen';
-import { TapGesture } from '../screens/TapGesture';
-import { DragGesture } from '../screens/DragGesture';
-import { SwappableList } from '../screens/SwappableList';
-import { LongPress } from '../screens/LongPress';
+import { HomeScreen } from '../screens/Reanimated/HomeScreen';
+import { SharedValueScreen } from '../screens/Reanimated/SharedValueScreen';
+import { AnimatedStyleScreen } from '../screens/Reanimated/AnimatedStyleScreen';
+import { WithTimingScreen } from '../screens/Reanimated/WithTimingScreen';
+import { WithDecayScreen } from '../screens/Reanimated/WithDecayScreen';
+import { WithDelayScreen } from '../screens/Reanimated/WithDelayScreen';
+import { TapGesture } from '../screens/Reanimated/TapGesture';
+import { DragGesture } from '../screens/Reanimated/DragGesture';
+import { SwappableList } from '../screens/Reanimated/SwappableList';
+import { LongPress } from '../screens/Reanimated/LongPress';
+import { RotateGesture } from '../screens/Reanimated/RotateGesture';
+import { PinchGesture } from '../screens/Reanimated/PinchGesture';
+import { ImagePreview } from '../screens/Reanimated/ImagePreview';
+import { ReanimatedSwappableList } from '../screens/Reanimated/ReanimatedSwappableList';
+import SharedElementExample from './NavigationTransition';
+import { CustomDrawerContent } from './CustomDrawer';
+import { SkeletonComponent } from '../screens/Moti/Skeleton';
+import { MotiViewComponent } from '../screens/Moti/MotiView';
+import { SequenceAnimation } from '../screens/Moti/SequenceAnimation';
+import { RepeatLoop } from '../screens/Moti/RepeatLoop';
+import { TransitionAnimation } from '../screens/Moti/TransitionAnimation';
 
 export type RootDrawerParamList = {
   Home: undefined;
@@ -34,50 +37,19 @@ export type RootDrawerParamList = {
   DragGesture: undefined;
   SwappableList: undefined;
   LongPress: undefined;
+  RotateGesture: undefined;
+  PinchGesture: undefined;
+  ImagePreview: undefined;
+  ReanimatedSwappableList: undefined;
+  SharedElementExample: undefined;
+  MotiView: undefined;
+  Skeleton: undefined;
+  SequenceAnimation: undefined;
+  RepeatLoop: undefined;
+  TransitionAnimation: undefined;
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
-
-const CustomDrawerContent = (props: any) => {
-  const { navigation } = props;
-
-  const menuItems = [
-    { label: 'Home', screen: 'Home' },
-    { label: 'Shared Value', screen: 'SharedValue' },
-    { label: 'Animated Style', screen: 'AnimatedStyle' },
-    { label: 'With Timing', screen: 'WithTiming' },
-    { label: 'With Decay', screen: 'WithDecay' },
-    { label: 'With Delay', screen: 'WithDelay' },
-    { label: 'Tap Gesture', screen: 'TapGesture' },
-    { label: 'Drag Gesture', screen: 'DragGesture' },
-    { label: 'Swappable List', screen: 'SwappableList' },
-    { label: 'Long Press', screen: 'LongPress' },
-  ];
-
-  return (
-    <SafeAreaView style={styles.safeAreaDrawer} edges={['top', 'bottom']}>
-      <View style={styles.drawerContainer}>
-        <View style={styles.drawerHeader}>
-          <Text style={styles.drawerTitle}>{'Animation Learning'}</Text>
-        </View>
-
-        <ScrollView style={styles.drawerContent}>
-          {menuItems.map(item => (
-            <TouchableOpacity
-              key={item.screen}
-              style={styles.drawerItem}
-              onPress={() => {
-                navigation.navigate(item.screen);
-              }}
-            >
-              <Text style={styles.drawerItemLabel}>{item.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-    </SafeAreaView>
-  );
-};
 
 const drawerContent = (props: DrawerContentComponentProps) => {
   return <CustomDrawerContent {...props} />;
@@ -187,45 +159,87 @@ export const RootNavigator = () => {
             drawerLabel: 'Long Press',
           }}
         />
+        <Drawer.Screen
+          name="RotateGesture"
+          component={RotateGesture}
+          options={{
+            title: 'Rotate Gesture',
+            drawerLabel: 'Rotate Gesture',
+          }}
+        />
+        <Drawer.Screen
+          name="PinchGesture"
+          component={PinchGesture}
+          options={{
+            title: 'Pinch Gesture',
+            drawerLabel: 'Pinch Gesture',
+          }}
+        />
+        <Drawer.Screen
+          name="ImagePreview"
+          component={ImagePreview}
+          options={{
+            title: 'Image Preview',
+            drawerLabel: 'Image Preview',
+          }}
+        />
+        <Drawer.Screen
+          name="ReanimatedSwappableList"
+          component={ReanimatedSwappableList}
+          options={{
+            title: 'Reanimated Swappable List',
+            drawerLabel: 'Reanimated Swappable List',
+          }}
+        />
+        <Drawer.Screen
+          name="SharedElementExample"
+          component={SharedElementExample}
+          options={{
+            title: 'Reanimated Swappable List',
+            drawerLabel: 'Reanimated Swappable List',
+          }}
+        />
+        <Drawer.Screen
+          name="MotiView"
+          component={MotiViewComponent}
+          options={{
+            title: 'Moti View',
+            drawerLabel: 'Moti View',
+          }}
+        />
+        <Drawer.Screen
+          name="Skeleton"
+          component={SkeletonComponent}
+          options={{
+            title: 'Moti Skeleton',
+            drawerLabel: 'Moti Skeleton',
+          }}
+        />
+        <Drawer.Screen
+          name="SequenceAnimation"
+          component={SequenceAnimation}
+          options={{
+            title: 'Sequence Animation',
+            drawerLabel: 'Sequence Animation',
+          }}
+        />
+        <Drawer.Screen
+          name="RepeatLoop"
+          component={RepeatLoop}
+          options={{
+            title: 'Repeat and Loop',
+            drawerLabel: 'Repeat and Loop',
+          }}
+        />
+        <Drawer.Screen
+          name="TransitionAnimation"
+          component={TransitionAnimation}
+          options={{
+            title: 'Transition Animation',
+            drawerLabel: 'Transition Animation',
+          }}
+        />
       </Drawer.Navigator>
     </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  safeAreaDrawer: {
-    flex: 1,
-    backgroundColor: '#6200ee',
-  },
-  drawerContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  drawerHeader: {
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    backgroundColor: '#6200ee',
-  },
-  drawerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  drawerContent: {
-    flex: 1,
-    paddingVertical: 8,
-  },
-  drawerItem: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  drawerItemLabel: {
-    fontSize: 16,
-    color: '#333',
-    fontWeight: '500',
-  },
-});
