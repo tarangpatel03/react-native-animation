@@ -23,16 +23,13 @@ export const RepeatLoop = ({ navigation }: { navigation: any }) => {
   const { bottom } = useSafeAreaInsets();
   const [animationType, setType] = useState<'Loop' | 'Repeat' | null>(null);
   const [repeatCount, setRepeatCount] = useState(1);
-  const [playKey, setPlayKey] = useState(0);
 
   const startLoop = () => {
     setType('Loop');
-    setPlayKey(prev => prev + 1);
   };
 
   const startRepeat = () => {
     setType('Repeat');
-    setPlayKey(prev => prev + 1);
   };
 
   return (
@@ -53,17 +50,15 @@ export const RepeatLoop = ({ navigation }: { navigation: any }) => {
               maximumTrackTintColor={colors.app_E0E0E0}
               thumbTintColor={colors.primary}
               onValueChange={setRepeatCount}
-              onSlidingComplete={() => {
-                setPlayKey(prev => prev + 1);
-              }}
+              onSlidingComplete={setRepeatCount}
             />
           </View>
         )}
         <Pressable style={styles.animationContainer}>
           <AnimatePresence exitBeforeEnter>
-            {animationType && (
+            {animationType === 'Loop' && (
               <MotiView
-                key={`${animationType}-${playKey}`}
+                key={`${animationType}`}
                 from={{ scale: 1 }}
                 animate={{
                   scale: [1, 1.1, 1],
@@ -72,6 +67,20 @@ export const RepeatLoop = ({ navigation }: { navigation: any }) => {
                   duration: 300,
                   type: 'timing',
                   loop: animationType === 'Loop',
+                }}
+                style={styles.shape}
+              />
+            )}
+            {animationType === 'Repeat' && (
+              <MotiView
+                key={`${animationType}`}
+                from={{ scale: 1 }}
+                animate={{
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  duration: 300,
+                  type: 'timing',
                   repeat: animationType === 'Repeat' ? repeatCount : 0,
                 }}
                 style={styles.shape}

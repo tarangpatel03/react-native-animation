@@ -44,6 +44,9 @@ const sections: DrawerSection[] = [
       { label: 'Sequence Animation', route: 'SequenceAnimation' },
       { label: 'Repeat and Loop', route: 'RepeatLoop' },
       { label: 'Transition Animation', route: 'TransitionAnimation' },
+      { label: 'Dynamic Animation', route: 'DynamicAnimation' },
+      { label: 'Moti Pressable', route: 'MotiPressableComponent' },
+      { label: 'Skeleton Component', route: 'SkeletonComponent2' },
     ],
   },
 ];

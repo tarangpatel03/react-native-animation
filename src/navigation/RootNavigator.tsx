@@ -25,6 +25,9 @@ import { MotiViewComponent } from '../screens/Moti/MotiView';
 import { SequenceAnimation } from '../screens/Moti/SequenceAnimation';
 import { RepeatLoop } from '../screens/Moti/RepeatLoop';
 import { TransitionAnimation } from '../screens/Moti/TransitionAnimation';
+import { DynamicAnimation } from '../screens/Moti/DynamicAnimation';
+import { MotiPressableComponent } from '../screens/Moti/MotiPressable';
+import { SkeletonComponent2 } from '../screens/Moti/SkeletonComponent';
 
 export type RootDrawerParamList = {
   Home: undefined;
@@ -47,6 +50,9 @@ export type RootDrawerParamList = {
   SequenceAnimation: undefined;
   RepeatLoop: undefined;
   TransitionAnimation: undefined;
+  DynamicAnimation: undefined;
+  MotiPressableComponent: undefined;
+  SkeletonComponent2: undefined;
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -237,6 +243,30 @@ export const RootNavigator = () => {
           options={{
             title: 'Transition Animation',
             drawerLabel: 'Transition Animation',
+          }}
+        />
+        <Drawer.Screen
+          name="DynamicAnimation"
+          component={DynamicAnimation}
+          options={{
+            title: 'Dynamic Animation',
+            drawerLabel: 'Dynamic Animation',
+          }}
+        />
+        <Drawer.Screen
+          name="MotiPressableComponent"
+          component={MotiPressableComponent}
+          options={{
+            title: 'Dynamic Animation',
+            drawerLabel: 'Dynamic Animation',
+          }}
+        />
+        <Drawer.Screen
+          name="SkeletonComponent2"
+          component={SkeletonComponent2}
+          options={{
+            title: 'Skeleton Component',
+            drawerLabel: 'Skeleton Component',
           }}
         />
       </Drawer.Navigator>
